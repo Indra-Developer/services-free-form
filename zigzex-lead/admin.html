@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | ZIGZEX IT SERVICES</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    colors: {
+                        'zigzex-blue': '#0052A3',
+                        'zigzex-navy': '#0A192F',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .loader {
+            border: 3px solid #f3f3f3; border-radius: 50%;
+            border-top: 3px solid #0052A3; width: 30px; height: 30px;
+            animation: spin 1s linear infinite; margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="text-slate-700 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-zigzex-navy text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <img src="zindra.png" alt="Logo" class="h-8 bg-white p-1 rounded">
+                    <span class="font-bold text-lg tracking-wide">Lead Management Dashboard</span>
+                </div>
+                <button onclick="fetchLeads()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded text-sm font-medium transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    Refresh Data
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-sm font-semibold text-slate-500 uppercase">Total Leads</p>
+                <p class="text-3xl font-bold text-zigzex-navy mt-2" id="count-total">-</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-sm font-semibold text-emerald-500 uppercase">New</p>
+                <p class="text-3xl font-bold text-slate-900 mt-2" id="count-new">-</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-sm font-semibold text-blue-500 uppercase">In Progress</p>
+                <p class="text-3xl font-bold text-slate-900 mt-2" id="count-progress">-</p>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Client Info</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Service Needed</th>
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTableBody" class="bg-white divide-y divide-slate-200">
+                        <!-- Loading State -->
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                                <div class="loader"></div>
+                                Loading leads from database...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Detail View Modal -->
+    <div id="viewModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-zigzex-navy">Lead Details</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-700 bg-white hover:bg-slate-100 rounded-full p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto hide-scrollbar space-y-6" id="modalContent">
+                <!-- Injected via JS -->
+            </div>
+            
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
+                <button onclick="closeModal()" class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50">Close Window</button>
+                <a href="#" id="modalEmailBtn" class="px-4 py-2 bg-zigzex-blue text-white rounded-lg font-medium hover:bg-zigzex-blue-dark">Send Email</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE & LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Firebase Configuration (Same as Frontend)
+        const firebaseConfig = {
+            apiKey: "AIzaSyD76uBccM6QrriwnV9sN5_F4JM3T4Vrqns",
+            authDomain: "free-service-form.firebaseapp.com",
+            projectId: "free-service-form",
+            storageBucket: "free-service-form.firebasestorage.app",
+            messagingSenderId: "359072573152",
+            appId: "1:359072573152:web:e630e721408666329d1285",
+            measurementId: "G-6JC4P81VQ4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        let allLeads = []; // Store leads in memory for the modal
+
+        // Format Date Helper
+        const formatDate = (timestamp) => {
+            if (!timestamp) return 'Just now';
+            const date = timestamp.toDate();
+            return new Intl.DateTimeFormat('en-IN', { 
+                day: '2-digit', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            }).format(date);
+        };
+
+        // Status Colors Helper
+        const getStatusBadge = (status) => {
+            const styles = {
+                'New': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                'Contacted': 'bg-amber-100 text-amber-800 border-amber-200',
+                'In Progress': 'bg-blue-100 text-blue-800 border-blue-200',
+                'Completed': 'bg-purple-100 text-purple-800 border-purple-200',
+                'Rejected': 'bg-slate-100 text-slate-800 border-slate-200'
+            };
+            const currentStyle = styles[status] || styles['New'];
+            return `<span class="px-2.5 py-1 text-xs font-semibold rounded-full border ${currentStyle}">${status}</span>`;
+        };
+
+        // Fetch (Read) Leads
+        window.fetchLeads = async () => {
+            const tbody = document.getElementById('leadsTableBody');
+            tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-slate-500"><div class="loader"></div>Fetching data...</td></tr>`;
+            
+            try {
+                // Fetch sorted by newest first
+                const q = query(collection(db, "leads"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                allLeads = [];
+                let stats = { total: 0, new: 0, progress: 0 };
+                tbody.innerHTML = '';
+
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-slate-500 font-medium">No leads found in the database.</td></tr>`;
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const id = doc.id;
+                    allLeads.push({ id, ...data });
+                    
+                    // Stats calculation
+                    stats.total++;
+                    if(data.status === 'New') stats.new++;
+                    if(data.status === 'In Progress') stats.progress++;
+
+                    const row = `
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                                ${formatDate(data.createdAt)}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-bold text-slate-900">${data.name || 'N/A'}</div>
+                                <div class="text-sm text-slate-500 flex flex-col gap-0.5 mt-1">
+                                    <a href="mailto:${data.email}" class="hover:text-blue-600">${data.email}</a>
+                                    <a href="tel:${data.phone}" class="hover:text-blue-600">${data.phone}</a>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-medium text-slate-900">${data.category}</div>
+                                <div class="text-sm text-slate-500">${data.service}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <select onchange="updateLeadStatus('${id}', this.value)" class="text-sm border border-slate-300 rounded bg-white px-2 py-1 outline-none focus:border-zigzex-blue focus:ring-1 focus:ring-zigzex-blue">
+                                    <option value="New" ${data.status === 'New' ? 'selected' : ''}>New</option>
+                                    <option value="Contacted" ${data.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                                    <option value="In Progress" ${data.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+                                    <option value="Completed" ${data.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                                    <option value="Rejected" ${data.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                                </select>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button onclick="viewLead('${id}')" class="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded mr-2 transition-colors">View</button>
+                                <button onclick="deleteLead('${id}')" class="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded transition-colors">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Update Stats UI
+                document.getElementById('count-total').innerText = stats.total;
+                document.getElementById('count-new').innerText = stats.new;
+                document.getElementById('count-progress').innerText = stats.progress;
+
+            } catch (error) {
+                console.error("Error fetching leads:", error);
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-red-500 font-medium">Error loading data. Did you update Firestore Security Rules?</td></tr>`;
+            }
+        };
+
+        // Update Lead Status
+        window.updateLeadStatus = async (docId, newStatus) => {
+            try {
+                const leadRef = doc(db, "leads", docId);
+                await updateDoc(leadRef, {
+                    status: newStatus
+                });
+                // Slight visual feedback could go here
+                fetchLeads(); // Refresh stats
+            } catch (error) {
+                console.error("Error updating status:", error);
+                alert("Failed to update status. Check permissions.");
+            }
+        };
+
+        // Delete Lead
+        window.deleteLead = async (docId) => {
+            if(confirm("Are you sure you want to permanently delete this lead? This action cannot be undone.")) {
+                try {
+                    await deleteDoc(doc(db, "leads", docId));
+                    fetchLeads(); // Refresh table
+                } catch (error) {
+                    console.error("Error deleting lead:", error);
+                    alert("Failed to delete lead. Check permissions.");
+                }
+            }
+        };
+
+        // View Lead Details in Modal
+        window.viewLead = (docId) => {
+            const lead = allLeads.find(l => l.id === docId);
+            if(!lead) return;
+
+            const modalContent = document.getElementById('modalContent');
+            document.getElementById('modalEmailBtn').href = `mailto:${lead.email}?subject=Regarding your request for ${lead.category}`;
+
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-2 gap-6 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Client Name</p>
+                        <p class="font-medium text-slate-900">${lead.name}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Submitted On</p>
+                        <p class="font-medium text-slate-900">${formatDate(lead.createdAt)}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Email</p>
+                        <a href="mailto:${lead.email}" class="font-medium text-blue-600 hover:underline">${lead.email}</a>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Phone</p>
+                        <a href="tel:${lead.phone}" class="font-medium text-blue-600 hover:underline">${lead.phone}</a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+                    <div>
+                        <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">Category</p>
+                        <p class="font-bold text-zigzex-navy">${lead.category}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">Specific Service</p>
+                        <p class="font-bold text-zigzex-navy">${lead.service}</p>
+                    </div>
+                </div>
+
+                ${lead.existingUrl ? `
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Existing Website / App Link</p>
+                    <a href="${lead.existingUrl.startsWith('http') ? lead.existingUrl : 'https://' + lead.existingUrl}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded text-blue-600 font-medium transition-colors">
+                        Visit Link <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                </div>` : ''}
+
+                <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Project Idea / Description</p>
+                    <div class="bg-white border border-slate-200 p-4 rounded-lg text-slate-700 whitespace-pre-wrap leading-relaxed shadow-sm min-h-[100px]">
+                        ${lead.description || '<em class="text-slate-400">No description provided.</em>'}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeModal = () => {
+            document.getElementById('viewModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        };
+
+        // Initialize Data
+        window.addEventListener('DOMContentLoaded', fetchLeads);
+
+    </script>
+</body>
+</html>

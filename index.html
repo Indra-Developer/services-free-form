@@ -1,13 +1,841 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ZIGZEX IT SERVICES Pvt Ltd | Professional Software Development</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'zigzex-blue': '#0052A3', 
+                        'zigzex-blue-dark': '#003D7A',
+                        'zigzex-navy': '#0A192F',
+                        'zigzex-light': '#F8FAFC',
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'modal': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Clean custom utilities */
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .accordion-content { transition: max-height 0.3s ease-out, opacity 0.3s ease-out; overflow: hidden; }
+        .modal-enter { animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .modal-exit { animation: modalFadeOut 0.3s ease-in forwards; }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes modalFadeOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(10px) scale(0.98); }
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+            border-top: 3px solid #fff; width: 20px; height: 20px;
+            animation: spin 1s linear infinite; display: inline-block;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
+<body class="bg-white text-slate-600 font-sans relative pb-20 md:pb-0">
 
-<body>
+    <!-- HEADER -->
+    <header class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-100 z-40 transition-all">
+        <div class="container mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex-shrink-0">
+                <img src="zindra.png" alt="ZIGZEX IT SERVICES Pvt Ltd" class="h-10 w-auto object-contain">
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#services" class="text-sm font-medium text-slate-700 hover:text-zigzex-blue transition-colors">Services</a>
+                <a href="#why-us" class="text-sm font-medium text-slate-700 hover:text-zigzex-blue transition-colors">Why Us</a>
+                <a href="#how-it-works" class="text-sm font-medium text-slate-700 hover:text-zigzex-blue transition-colors">How It Works</a>
+                <a href="#faq" class="text-sm font-medium text-slate-700 hover:text-zigzex-blue transition-colors">FAQs</a>
+                <a href="#contact" class="text-sm font-medium text-slate-700 hover:text-zigzex-blue transition-colors">Contact</a>
+                <button onclick="openForm()" class="bg-zigzex-blue text-white px-5 py-2.5 rounded text-sm font-medium hover:bg-zigzex-blue-dark transition-colors shadow-sm">
+                    Get Free Development
+                </button>
+            </nav>
+
+            <button class="md:hidden text-slate-700 focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+        
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="flex flex-col px-6 py-4 gap-4">
+                <a href="#services" class="text-base font-medium text-slate-700" onclick="toggleMobileMenu()">Services</a>
+                <a href="#why-us" class="text-base font-medium text-slate-700" onclick="toggleMobileMenu()">Why Us</a>
+                <a href="#how-it-works" class="text-base font-medium text-slate-700" onclick="toggleMobileMenu()">How It Works</a>
+                <a href="#faq" class="text-base font-medium text-slate-700" onclick="toggleMobileMenu()">FAQs</a>
+                <a href="#contact" class="text-base font-medium text-slate-700" onclick="toggleMobileMenu()">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="pt-32 pb-20 md:pt-40 md:pb-32 container mx-auto px-6">
+        <div class="max-w-4xl mx-auto flex flex-col items-center text-center">
+            <div class="inline-block px-4 py-1.5 bg-blue-50 border border-blue-100 text-zigzex-blue text-xs font-bold tracking-widest uppercase rounded-full mb-8 shadow-sm">
+                Free Development Program
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-zigzex-navy leading-tight md:leading-tight lg:leading-tight mb-6 tracking-tight">
+                Have an Idea?<br>
+                <span class="text-zigzex-blue">Let’s Build It.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                We help individuals, startups, and businesses turn their ideas into modern websites, mobile apps, and software solutions — with eligible development offered completely free.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mb-14 w-full sm:w-auto">
+                <button onclick="openForm()" class="w-full sm:w-auto bg-zigzex-blue text-white px-8 py-4 rounded-lg font-semibold hover:bg-zigzex-blue-dark transition-all shadow-soft hover:shadow-md flex items-center justify-center gap-2 text-base md:text-lg">
+                    Get Free Development <span>&rarr;</span>
+                </button>
+                <a href="#services" class="w-full sm:w-auto bg-white border border-gray-200 text-slate-700 px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm flex items-center justify-center text-base md:text-lg">
+                    Explore Services
+                </a>
+            </div>
+            
+            <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-sm md:text-base font-medium text-slate-600">
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-zigzex-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 
+                    Modern Solutions
+                </span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-zigzex-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 
+                    Professional Development
+                </span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-zigzex-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 
+                    Friendly Guidance
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-24 bg-zigzex-light border-y border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-zigzex-navy mb-4 tracking-tight">What Can We Help You Build?</h2>
+                <p class="text-lg text-slate-600">Choose a service category to explore what we can help you with.</p>
+            </div>
+
+            <!-- Service Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                
+                <!-- Category 01 -->
+                <div class="service-card group bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-soft hover:border-zigzex-blue transition-all duration-300">
+                    <div class="p-8 cursor-pointer" onclick="toggleService('cat-1')">
+                        <div class="text-3xl mb-4">🌐</div>
+                        <h3 class="text-xl font-bold text-zigzex-navy mb-2 group-hover:text-zigzex-blue transition-colors">Websites</h3>
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">Business websites, portfolios, e-commerce and custom web experiences.</p>
+                        <div class="text-zigzex-blue text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View Services <span class="arrow">&rarr;</span>
+                        </div>
+                    </div>
+                    <div id="cat-1" class="accordion-content max-h-0 opacity-0 bg-slate-50 border-t border-gray-100 px-8">
+                        <div class="py-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">Available Services</h4>
+                            <ul class="space-y-2 mb-6">
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Business Website</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Portfolio Website</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Landing Page</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> E-Commerce Website</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Restaurant & Real Estate Website</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Custom / Existing Website Improvement</li>
+                            </ul>
+                            <button onclick="openForm('Website')" class="w-full bg-white border border-zigzex-blue text-zigzex-blue px-4 py-2.5 rounded font-medium hover:bg-zigzex-blue hover:text-white transition-colors text-sm">
+                                Request Free Website Development
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 02 -->
+                <div class="service-card group bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-soft hover:border-zigzex-blue transition-all duration-300">
+                    <div class="p-8 cursor-pointer" onclick="toggleService('cat-2')">
+                        <div class="text-3xl mb-4">📱</div>
+                        <h3 class="text-xl font-bold text-zigzex-navy mb-2 group-hover:text-zigzex-blue transition-colors">Mobile Apps</h3>
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">Android, business, booking, e-commerce and custom mobile applications.</p>
+                        <div class="text-zigzex-blue text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View Services <span class="arrow">&rarr;</span>
+                        </div>
+                    </div>
+                    <div id="cat-2" class="accordion-content max-h-0 opacity-0 bg-slate-50 border-t border-gray-100 px-8">
+                        <div class="py-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">Available Services</h4>
+                            <ul class="space-y-2 mb-6">
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Android App</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Business App</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> E-Commerce & Booking App</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Education & Service App</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Custom Mobile App</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Bug Fixes & Feature Updates</li>
+                            </ul>
+                            <button onclick="openForm('Mobile App')" class="w-full bg-white border border-zigzex-blue text-zigzex-blue px-4 py-2.5 rounded font-medium hover:bg-zigzex-blue hover:text-white transition-colors text-sm">
+                                Request Free App Development
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 03 -->
+                <div class="service-card group bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-soft hover:border-zigzex-blue transition-all duration-300">
+                    <div class="p-8 cursor-pointer" onclick="toggleService('cat-3')">
+                        <div class="text-3xl mb-4">💻</div>
+                        <h3 class="text-xl font-bold text-zigzex-navy mb-2 group-hover:text-zigzex-blue transition-colors">Desktop Applications</h3>
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">Business software for billing, inventory, management and daily operations.</p>
+                        <div class="text-zigzex-blue text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View Services <span class="arrow">&rarr;</span>
+                        </div>
+                    </div>
+                    <div id="cat-3" class="accordion-content max-h-0 opacity-0 bg-slate-50 border-t border-gray-100 px-8">
+                        <div class="py-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">Available Services</h4>
+                            <ul class="space-y-2 mb-6">
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Billing Software</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Inventory Software</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Employee & Student Management</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Office Management</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Custom Desktop App</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Existing Software Improvements</li>
+                            </ul>
+                            <button onclick="openForm('Desktop Application')" class="w-full bg-white border border-zigzex-blue text-zigzex-blue px-4 py-2.5 rounded font-medium hover:bg-zigzex-blue hover:text-white transition-colors text-sm">
+                                Request Free Software Development
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 04 -->
+                <div class="service-card group bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-soft hover:border-zigzex-blue transition-all duration-300">
+                    <div class="p-8 cursor-pointer" onclick="toggleService('cat-4')">
+                        <div class="text-3xl mb-4">📊</div>
+                        <h3 class="text-xl font-bold text-zigzex-navy mb-2 group-hover:text-zigzex-blue transition-colors">CRM & Business Systems</h3>
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">Customer, lead, employee, appointment and business management systems.</p>
+                        <div class="text-zigzex-blue text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View Services <span class="arrow">&rarr;</span>
+                        </div>
+                    </div>
+                    <div id="cat-4" class="accordion-content max-h-0 opacity-0 bg-slate-50 border-t border-gray-100 px-8">
+                        <div class="py-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">Available Services</h4>
+                            <ul class="space-y-2 mb-6">
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> CRM & Lead Management</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Customer Management</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Appointment System</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Task & Service Management</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Existing System Improvements</li>
+                            </ul>
+                            <button onclick="openForm('CRM / Business System')" class="w-full bg-white border border-zigzex-blue text-zigzex-blue px-4 py-2.5 rounded font-medium hover:bg-zigzex-blue hover:text-white transition-colors text-sm">
+                                Request Free Business System
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 05 -->
+                <div class="service-card group bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-soft hover:border-zigzex-blue transition-all duration-300">
+                    <div class="p-8 cursor-pointer" onclick="toggleService('cat-5')">
+                        <div class="text-3xl mb-4">☁️</div>
+                        <h3 class="text-xl font-bold text-zigzex-navy mb-2 group-hover:text-zigzex-blue transition-colors">SaaS & Custom Platforms</h3>
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">Cloud-based SaaS products, portals, marketplaces and custom platforms.</p>
+                        <div class="text-zigzex-blue text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View Services <span class="arrow">&rarr;</span>
+                        </div>
+                    </div>
+                    <div id="cat-5" class="accordion-content max-h-0 opacity-0 bg-slate-50 border-t border-gray-100 px-8">
+                        <div class="py-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">Available Services</h4>
+                            <ul class="space-y-2 mb-6">
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> SaaS MVP</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Multi-User & Membership Platform</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Customer & Admin Portals</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Booking Platform & Marketplace</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Existing SaaS Improvements</li>
+                            </ul>
+                            <button onclick="openForm('SaaS / Custom Platform')" class="w-full bg-white border border-zigzex-blue text-zigzex-blue px-4 py-2.5 rounded font-medium hover:bg-zigzex-blue hover:text-white transition-colors text-sm">
+                                Request Free SaaS Development
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 06 -->
+                <div class="service-card group bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-soft hover:border-zigzex-blue transition-all duration-300">
+                    <div class="p-8 cursor-pointer" onclick="toggleService('cat-6')">
+                        <div class="text-3xl mb-4">🤖</div>
+                        <h3 class="text-xl font-bold text-zigzex-navy mb-2 group-hover:text-zigzex-blue transition-colors">AI & Automation</h3>
+                        <p class="text-sm text-slate-600 mb-4 line-clamp-2">AI tools, chatbots, automation solutions and AI-powered MVPs.</p>
+                        <div class="text-zigzex-blue text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                            View Services <span class="arrow">&rarr;</span>
+                        </div>
+                    </div>
+                    <div id="cat-6" class="accordion-content max-h-0 opacity-0 bg-slate-50 border-t border-gray-100 px-8">
+                        <div class="py-6">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-gray-200 pb-2">Available Services</h4>
+                            <ul class="space-y-2 mb-6">
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> AI Chatbot</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> AI Recommendation & Assistant</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> AI Automation & Data Processing</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> AI-Based Custom MVP</li>
+                                <li class="text-sm text-slate-700 flex items-start gap-2"><span class="text-zigzex-blue mt-0.5">•</span> Existing AI Project Improvements</li>
+                            </ul>
+                            <button onclick="openForm('AI / Automation')" class="w-full bg-white border border-zigzex-blue text-zigzex-blue px-4 py-2.5 rounded font-medium hover:bg-zigzex-blue hover:text-white transition-colors text-sm">
+                                Request Free AI Development
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE ZIGZEX -->
+    <section id="why-us" class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-zigzex-navy mb-4 tracking-tight">Why Work With ZIGZEX?</h2>
+                <p class="text-lg text-slate-600 max-w-2xl">We focus on building useful digital solutions that are simple to understand and easy to use.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-bold text-zigzex-navy mb-3">Professional Development</h3>
+                    <p class="text-slate-600 leading-relaxed">Clean, structured and practical solutions tailored to solve actual business problems.</p>
+                </div>
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-bold text-zigzex-navy mb-3">Modern Technology</h3>
+                    <p class="text-slate-600 leading-relaxed">We employ modern tools, frameworks, and technologies exactly where they make the most sense.</p>
+                </div>
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-bold text-zigzex-navy mb-3">Client-Focused</h3>
+                    <p class="text-slate-600 leading-relaxed">We listen and ensure we completely understand your idea and goals before writing a single line of code.</p>
+                </div>
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-xl font-bold text-zigzex-navy mb-3">Ongoing Guidance</h3>
+                    <p class="text-slate-600 leading-relaxed">Consistent support, clear communication, and guidance throughout the entire development process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="py-24 bg-zigzex-navy text-white">
+        <div class="container mx-auto px-6 max-w-5xl text-center">
+            <h2 class="text-3xl font-bold mb-4 tracking-tight">How It Works</h2>
+            <p class="text-slate-300 max-w-2xl mx-auto mb-16">No technical knowledge required. Just explain what you need in simple words.</p>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center md:items-start gap-12 relative">
+                <div class="hidden md:block absolute top-10 left-[20%] right-[20%] h-[1px] bg-slate-700 z-0"></div>
+                
+                <div class="flex-1 flex flex-col items-center relative z-10">
+                    <div class="w-20 h-20 bg-zigzex-blue rounded-full flex items-center justify-center text-2xl font-bold mb-6 border-4 border-zigzex-navy shadow-xl">01</div>
+                    <h3 class="text-xl font-bold mb-2">Tell Us Your Idea</h3>
+                </div>
+                
+                <div class="flex-1 flex flex-col items-center relative z-10">
+                    <div class="w-20 h-20 bg-zigzex-blue rounded-full flex items-center justify-center text-2xl font-bold mb-6 border-4 border-zigzex-navy shadow-xl">02</div>
+                    <h3 class="text-xl font-bold mb-2">Choose Your Service</h3>
+                </div>
+                
+                <div class="flex-1 flex flex-col items-center relative z-10">
+                    <div class="w-20 h-20 bg-zigzex-blue rounded-full flex items-center justify-center text-2xl font-bold mb-6 border-4 border-zigzex-navy shadow-xl">03</div>
+                    <h3 class="text-xl font-bold mb-2">We Discuss & Build</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-3xl font-bold text-zigzex-navy mb-12 text-center tracking-tight">Frequently Asked Questions</h2>
+            
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left font-semibold text-zigzex-navy bg-slate-50 hover:bg-slate-100 flex justify-between items-center focus:outline-none" onclick="toggleFaq('faq-1')">
+                        Is the development really free?
+                        <span id="icon-faq-1" class="text-zigzex-blue text-xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-1" class="accordion-content max-h-0 bg-white">
+                        <div class="p-6 text-slate-600 border-t border-gray-100">
+                            Yes, the core software/web development is offered entirely free for eligible project scopes. However, external charges like domain registration, server hosting, or paid third-party APIs/services are not included and must be covered by the client.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left font-semibold text-zigzex-navy bg-slate-50 hover:bg-slate-100 flex justify-between items-center focus:outline-none" onclick="toggleFaq('faq-2')">
+                        What types of projects can I submit?
+                        <span id="icon-faq-2" class="text-zigzex-blue text-xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-2" class="accordion-content max-h-0 bg-white">
+                        <div class="p-6 text-slate-600 border-t border-gray-100">
+                            You can submit requests for websites, mobile applications, desktop software, CRMs, SaaS platforms, or AI automation tools. We evaluate every idea based on feasibility and scope.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left font-semibold text-zigzex-navy bg-slate-50 hover:bg-slate-100 flex justify-between items-center focus:outline-none" onclick="toggleFaq('faq-3')">
+                        Can you improve my existing website or app?
+                        <span id="icon-faq-3" class="text-zigzex-blue text-xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-3" class="accordion-content max-h-0 bg-white">
+                        <div class="p-6 text-slate-600 border-t border-gray-100">
+                            Absolutely. We take on improvement, bug fixing, and modernization projects for existing websites, applications, and business systems.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left font-semibold text-zigzex-navy bg-slate-50 hover:bg-slate-100 flex justify-between items-center focus:outline-none" onclick="toggleFaq('faq-4')">
+                        Do I need technical knowledge?
+                        <span id="icon-faq-4" class="text-zigzex-blue text-xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-4" class="accordion-content max-h-0 bg-white">
+                        <div class="p-6 text-slate-600 border-t border-gray-100">
+                            No technical knowledge is required. You just need to explain your idea and what problem it solves. Our team will handle the architecture, technology stack, and complex development work.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left font-semibold text-zigzex-navy bg-slate-50 hover:bg-slate-100 flex justify-between items-center focus:outline-none" onclick="toggleFaq('faq-5')">
+                        What happens after I submit the form?
+                        <span id="icon-faq-5" class="text-zigzex-blue text-xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-5" class="accordion-content max-h-0 bg-white">
+                        <div class="p-6 text-slate-600 border-t border-gray-100">
+                            Our team reviews your submission. If your project fits our program, we will contact you via email or phone to arrange a brief discussion to finalize requirements before we begin development.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="w-full px-6 py-4 text-left font-semibold text-zigzex-navy bg-slate-50 hover:bg-slate-100 flex justify-between items-center focus:outline-none" onclick="toggleFaq('faq-6')">
+                        Can you build an MVP for my startup idea?
+                        <span id="icon-faq-6" class="text-zigzex-blue text-xl transform transition-transform">+</span>
+                    </button>
+                    <div id="faq-6" class="accordion-content max-h-0 bg-white">
+                        <div class="p-6 text-slate-600 border-t border-gray-100">
+                            Yes, building Minimum Viable Products (MVPs) is one of our core specialties. We can help startup founders launch their initial version quickly and professionally.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-24 bg-zigzex-light relative overflow-hidden">
+        <div class="absolute inset-0 bg-zigzex-blue opacity-[0.03]"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center max-w-3xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-zigzex-navy mb-6 tracking-tight">Have an Idea?<br>Let’s Talk.</h2>
+            <p class="text-lg text-slate-600 mb-10">Tell us what you want to build. You don’t need technical knowledge — just your idea.</p>
+            <button onclick="openForm()" class="bg-zigzex-blue text-white px-8 py-4 rounded font-medium hover:bg-zigzex-blue-dark transition-colors shadow-sm text-lg inline-flex items-center gap-2">
+                Get Free Development <span>&rarr;</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-gray-200 pt-16 pb-24 md:pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <img src="zindra.png" alt="ZIGZEX IT SERVICES Pvt Ltd" class="h-10 w-auto mb-6 object-contain">
+                    <h4 class="font-bold text-zigzex-navy mb-2">Zigzex IT Services Pvt Ltd</h4>
+                    <p class="text-slate-500">Building Ideas. Creating Opportunities.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-zigzex-navy mb-4">Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-slate-500 hover:text-zigzex-blue transition-colors">Home</a></li>
+                        <li><a href="#services" class="text-slate-500 hover:text-zigzex-blue transition-colors">Services</a></li>
+                        <li><a href="#why-us" class="text-slate-500 hover:text-zigzex-blue transition-colors">Why Us</a></li>
+                        <li><a href="#how-it-works" class="text-slate-500 hover:text-zigzex-blue transition-colors">How It Works</a></li>
+                        <li><a href="#faq" class="text-slate-500 hover:text-zigzex-blue transition-colors">FAQs</a></li>
+                        <li><a href="#contact" class="text-slate-500 hover:text-zigzex-blue transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div id="contact">
+                    <h4 class="font-bold text-zigzex-navy mb-4">Contact & Social</h4>
+                    <ul class="space-y-3">
+                        <li class="text-slate-500">Email: hr@zigzex.com</li>
+                        <li class="text-slate-500">Phone: +91 89196 95571</li>
+                        <li class="text-slate-500">Phone: +91 63049 63771</li>
+                        <li class="text-slate-500 mb-4">Location: Madhurawada, Visakhapatnam</li>
+                        <li class="flex gap-4 pt-2">
+                            <a href="#" class="text-slate-400 hover:text-zigzex-blue">LinkedIn</a>
+                            <a href="#" class="text-slate-400 hover:text-zigzex-blue">Instagram</a>
+                            <a href="#" class="text-slate-400 hover:text-zigzex-blue">WhatsApp</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-400 text-sm">© 2026 ZIGZEX IT SERVICES Pvt Ltd. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GLOBAL CTA -->
+    <div class="hidden md:block fixed bottom-6 right-6 z-40">
+        <button onclick="openForm()" class="bg-zigzex-navy text-white px-5 py-3 rounded-full font-medium shadow-modal hover:bg-slate-800 transition-all flex items-center gap-2 group">
+            <span class="text-zigzex-blue group-hover:text-white transition-colors">✦</span> Get Free Development
+        </button>
+    </div>
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 p-4 z-40 pb-safe">
+        <button onclick="openForm()" class="w-full bg-zigzex-navy text-white px-4 py-3.5 rounded font-medium shadow-sm hover:bg-slate-800 transition-colors flex justify-center items-center gap-2">
+            Get Free Development &rarr;
+        </button>
+    </div>
+
+    <!-- SMART FORM MODAL -->
+    <div id="formModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto pt-20 pb-24 md:py-12">
+        <div id="modalContent" class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative max-h-full flex flex-col modal-enter ring-1 ring-slate-100">
+            
+            <button onclick="closeForm()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-full p-2.5 transition-all z-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+
+            <div class="p-8 border-b border-slate-100 shrink-0 bg-slate-50/50 rounded-t-2xl">
+                <h3 class="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">Let’s Start With Your Idea</h3>
+                <p class="text-slate-500 text-base">Not sure what you need? No problem. Tell us your idea and we’ll guide you.</p>
+            </div>
+
+            <div class="p-8 overflow-y-auto hide-scrollbar">
+                
+                <!-- SUCCESS STATE: Now includes the button to Explore Services -->
+                <div id="formSuccess" class="hidden text-center py-12">
+                    <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-emerald-100">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-3">Request Received!</h3>
+                    <p class="text-slate-600 text-lg mb-8 max-w-sm mx-auto">Thank you for sharing your idea. Our team will review it and contact you shortly.</p>
+                    
+                    <button onclick="closeFormAndScrollToServices()" class="w-full sm:w-auto bg-zigzex-blue text-white px-8 py-4 rounded-xl font-bold hover:bg-zigzex-blue-dark transition-all shadow-md inline-flex justify-center items-center gap-2">
+                        Explore Our Services &rarr;
+                    </button>
+                </div>
+
+                <form id="ideaForm" class="space-y-8">
+                    
+                    <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-blue-100 p-2 rounded-full text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Need immediate assistance?</p>
+                                <p class="text-xs text-slate-500">Call us directly to discuss your project.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 font-bold text-blue-600 ml-12 sm:ml-0">
+                            <a href="tel:+918919695571" class="hover:text-blue-800 hover:underline transition-colors">8919695571</a>
+                            <span class="text-blue-200">|</span>
+                            <a href="tel:+916304963771" class="hover:text-blue-800 hover:underline transition-colors">6304963771</a>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-900 mb-4 uppercase tracking-wide">What can we help you with?</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="categoryGrid"></div>
+                    </div>
+
+                    <div id="serviceSelectionBox" class="hidden bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <label class="block text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">What would you like?</label>
+                        <div class="flex flex-wrap gap-2" id="serviceGrid"></div>
+                    </div>
+
+                    <hr class="border-slate-100">
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-900 mb-2">Briefly tell us about your idea</label>
+                        <textarea id="f_description" rows="4" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all resize-none shadow-sm" placeholder="Example: I need a website for my restaurant with a menu, contact details, and WhatsApp integration."></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Full Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="f_name" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Phone Number <span class="text-red-500">*</span></label>
+                            <input type="tel" id="f_phone" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="+91 00000 00000">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Email Address <span class="text-red-500">*</span></label>
+                            <input type="email" id="f_email" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="john@example.com">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-slate-900 mb-2">Existing Website / App Link <span class="text-slate-400 font-medium">(Optional)</span></label>
+                            <input type="url" id="f_url" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="https://yourwebsite.com">
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Error State to alert about Firestore rules -->
+                    <div id="formError" class="hidden text-red-700 text-sm font-medium bg-red-50 p-4 rounded-lg border border-red-200 flex items-start gap-3">
+                        <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                        <div id="formErrorText">An error occurred while submitting your request. Please try again.</div>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 relative">
+                            <span id="btnText">Submit Free Request &rarr;</span>
+                            <span id="btnLoader" class="hidden spinner absolute right-6"></span>
+                        </button>
+                        <p class="text-center text-slate-400 text-xs mt-4">We respect your privacy. No spam, ever.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD76uBccM6QrriwnV9sN5_F4JM3T4Vrqns",
+            authDomain: "free-service-form.firebaseapp.com",
+            projectId: "free-service-form",
+            storageBucket: "free-service-form.firebasestorage.app",
+            messagingSenderId: "359072573152",
+            appId: "1:359072573152:web:e630e721408666329d1285",
+            measurementId: "G-6JC4P81VQ4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const serviceData = {
+            "Website": ["New Website", "Existing Website Improvement", "E-Commerce", "Landing Page", "Other"],
+            "Mobile App": ["New Mobile App", "Existing App Improvement", "E-Commerce App", "Business App", "Other"],
+            "Desktop Application": ["New Desktop App", "Existing Software Improvement", "Billing Software", "Inventory System", "Other"],
+            "CRM / Business System": ["New CRM System", "Existing System Improvement", "Lead Management", "Booking System", "Other"],
+            "SaaS / Custom Platform": ["SaaS MVP", "Custom Web App", "Customer Portal", "Marketplace", "Other"],
+            "AI / Automation": ["AI Chatbot", "Automation Tool", "AI MVP", "Data Processing", "Other"]
+        };
+
+        let currentCategory = null;
+        let currentService = null;
+
+        // Exposed global functions
+        window.toggleMobileMenu = () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        };
+
+        window.toggleService = (id) => {
+            const content = document.getElementById(id);
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                content.style.opacity = 0;
+            } else {
+                document.querySelectorAll('.accordion-content').forEach(el => {
+                    if(el.id !== id && el.id.startsWith('cat-')) {
+                        el.style.maxHeight = null;
+                        el.style.opacity = 0;
+                    }
+                });
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.opacity = 1;
+            }
+        };
+
+        window.toggleFaq = (id) => {
+            const content = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.style.transform = "rotate(0deg)";
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.style.transform = "rotate(45deg)";
+            }
+        };
+
+        window.selectCategory = (cat) => {
+            currentCategory = cat;
+            currentService = null;
+            renderCategories();
+            renderServices();
+            document.getElementById('serviceSelectionBox').classList.remove('hidden');
+        }
+
+        function renderCategories() {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = '';
+            Object.keys(serviceData).forEach(cat => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `p-3 text-sm font-medium border rounded-lg text-left transition-all ${currentCategory === cat ? 'bg-blue-50 border-zigzex-blue text-zigzex-blue ring-1 ring-zigzex-blue' : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300'}`;
+                btn.innerText = cat;
+                btn.onclick = () => window.selectCategory(cat);
+                grid.appendChild(btn);
+            });
+        }
+
+        function renderServices() {
+            const grid = document.getElementById('serviceGrid');
+            grid.innerHTML = '';
+            if(!currentCategory) return;
+            
+            serviceData[currentCategory].forEach(srv => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = `px-4 py-2 text-sm border rounded-full transition-all ${currentService === srv ? 'bg-zigzex-navy border-zigzex-navy text-white shadow-sm' : 'bg-white border-gray-200 text-slate-600 hover:border-gray-300 hover:bg-slate-50'}`;
+                btn.innerText = srv;
+                btn.onclick = () => {
+                    currentService = srv;
+                    renderServices();
+                };
+                grid.appendChild(btn);
+            });
+        }
+
+        window.openForm = (preselectCategory = null) => {
+            const modal = document.getElementById('formModal');
+            const content = document.getElementById('modalContent');
+            
+            document.getElementById('ideaForm').reset();
+            document.getElementById('ideaForm').classList.remove('hidden');
+            document.getElementById('formSuccess').classList.add('hidden');
+            document.getElementById('formError').classList.add('hidden');
+            currentCategory = null;
+            currentService = null;
+            document.getElementById('serviceSelectionBox').classList.add('hidden');
+            
+            if (preselectCategory && serviceData[preselectCategory]) {
+                window.selectCategory(preselectCategory);
+            } else {
+                renderCategories();
+            }
+
+            modal.classList.remove('hidden');
+            content.classList.remove('modal-exit');
+            content.classList.add('modal-enter');
+            document.body.style.overflow = 'hidden'; 
+        };
+
+        window.closeForm = () => {
+            const modal = document.getElementById('formModal');
+            const content = document.getElementById('modalContent');
+            
+            content.classList.remove('modal-enter');
+            content.classList.add('modal-exit');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 300);
+        };
+
+        // NEW function: Closes the form and redirects user to services
+        window.closeFormAndScrollToServices = () => {
+            window.closeForm();
+            setTimeout(() => {
+                const servicesSection = document.getElementById('services');
+                servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 350); 
+        };
+
+        document.getElementById('ideaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!currentCategory || !currentService) {
+                alert("Please select what we can help you with and your specific preference.");
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const errorDiv = document.getElementById('formError');
+            const errorText = document.getElementById('formErrorText');
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-90', 'cursor-not-allowed');
+            document.getElementById('btnText').innerText = "Submitting...";
+            document.getElementById('btnLoader').classList.remove('hidden');
+            errorDiv.classList.add('hidden');
+
+            const payload = {
+                leadId: 'ZIG-' + Date.now(),
+                category: currentCategory,
+                service: currentService,
+                description: document.getElementById('f_description').value.trim(),
+                name: document.getElementById('f_name').value.trim(),
+                phone: document.getElementById('f_phone').value.trim(),
+                email: document.getElementById('f_email').value.trim(),
+                existingUrl: document.getElementById('f_url').value.trim() || null,
+                source: 'Website Main Form',
+                status: 'New',
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "leads"), payload);
+                document.getElementById('ideaForm').classList.add('hidden');
+                document.getElementById('formSuccess').classList.remove('hidden');
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                errorDiv.classList.remove('hidden');
+                
+                // Specific error check for insufficient permissions
+                if (error.code === 'permission-denied') {
+                    errorText.innerHTML = "<strong>Database Error:</strong> Firebase permissions denied. The developer must update Firestore Rules to 'allow create: if true;'";
+                } else {
+                    errorText.innerText = "An error occurred while submitting your request. Please try again later.";
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+                document.getElementById('btnText').innerText = "Submit Free Request \u2192";
+                document.getElementById('btnLoader').classList.add('hidden');
+            }
+        });
+
+        renderCategories();
+
+        // Automatically open the form when the page fully loads
+        window.addEventListener('DOMContentLoaded', () => {
+            // Added an 800ms delay so the background website renders properly before the form pops up.
+            setTimeout(() => {
+                window.openForm();
+            }, 800);
+        });
+    </script>
 </body>
-
 </html>

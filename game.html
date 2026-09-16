@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Tracker Pro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            --card: rgba(255, 255, 255, 0.95);
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text);
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px 10px;
+            min-height: 100vh;
+        }
+
+        h1, h2 { 
+            text-align: center; 
+            color: #0f172a;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            animation: slideInUp 0.5s ease-out forwards;
+        }
+
+        .flex { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+            width: 100%;
+        }
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        button:hover { 
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px -1px rgba(99, 102, 241, 0.4);
+        }
+        button:active {
+            transform: translateY(1px) scale(0.97);
+        }
+        button.secondary { 
+            background-color: #f1f5f9; 
+            color: #475569; 
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.05);
+        }
+        button.secondary:hover { background-color: #e2e8f0; }
+        button.danger { background-color: var(--danger); box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); }
+        button.danger:hover { background-color: #dc2626; }
+        
+        /* Game List */
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: popIn 0.4s ease-out backwards;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .game-item:hover {
+            transform: scale(1.01) translateX(5px);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            padding-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: inset 0 0 0 1px var(--border);
+            background: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        th, td {
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            padding: 10px 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        th { 
+            background-color: #f8fafc; 
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            cursor: default;
+        }
+        tr.player-row { animation: slideInRight 0.4s ease-out backwards; }
+        tr.player-row:hover td { background-color: #f8fafc; }
+
+        td input[type="number"] {
+            width: 65px;
+            padding: 10px 5px;
+            border: 2px solid transparent;
+            background: #f1f5f9;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: var(--primary);
+        }
+        td input[type="number"]:focus {
+            background: white;
+            border-color: var(--primary);
+            outline: none;
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .total-col { font-weight: 700; color: var(--success); font-size: 1.25em; white-space: nowrap; }
+
+        .bounce-anim { animation: scoreBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* STICKY COLUMN CSS */
+        th:first-child, td:first-child {
+            position: sticky; left: 0; z-index: 10; background-color: white; text-align: left; border-left: none;
+        }
+        th:first-child { background-color: #f8fafc; z-index: 11; }
+        td:first-child::after, th:first-child::after {
+            content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 5px;
+            background: linear-gradient(to right, rgba(0,0,0,0.05), transparent); transform: translateX(100%);
+        }
+
+        .player-info {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 140px;
+        }
+        .player-name-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; flex-shrink: 0; }
+
+        /* --- HIDDEN ACTION BUTTONS (Hover/Click to reveal) --- */
+        .icon-btn {
+            background: none; border: none; box-shadow: none; padding: 4px; margin: 0;
+            color: var(--text-light); border-radius: 6px; font-size: 14px; cursor: pointer;
+        }
+        .icon-btn:hover { background: #f1f5f9; color: var(--danger); transform: none; box-shadow: none; }
+
+        .delete-btn, .edit-hint {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none; /* Can't click when hidden */
+            transition: all 0.2s ease;
+        }
+        
+        /* Reveal when hovering or tapping the container */
+        .round-header:hover .delete-btn, .round-header.touched .delete-btn,
+        .player-info:hover .delete-btn, .player-info.touched .delete-btn {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .player-name-wrap:hover .edit-hint, .player-name-wrap.touched .edit-hint {
+            opacity: 0.6;
+            transform: scale(1);
+        }
+
+        #game-board { display: none; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 600px) {
+            .flex { flex-direction: column; align-items: stretch; }
+            button { width: 100%; justify-content: center; }
+            .card { padding: 15px; }
+            .game-item div { width: 100%; display: flex; gap: 10px; }
+            .game-item div button { flex: 1; }
+            .header-flex { flex-direction: row !important; align-items: center; }
+            .header-flex button { width: auto; padding: 8px 12px; font-size: 14px; }
+            .header-flex h2 { font-size: 18px; }
+        }
+
+        /* Animations */
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes slideInRight { 0% { opacity: 0; transform: translateX(-15px); } 100% { opacity: 1; transform: translateX(0); } }
+        @keyframes scoreBounce { 0% { transform: scale(1); color: var(--success); } 50% { transform: scale(1.3); color: var(--primary); } 100% { transform: scale(1); color: var(--success); } }
+    </style>
+</head>
+<body>
+
+    <!-- SECTION 1: Game Selection -->
+    <div id="game-manager" class="card">
+        <h1>🏆 Score Tracker Pro</h1>
+        <div class="flex">
+            <input type="text" id="newGameName" placeholder="Enter new game name (e.g., Monopoly)..." onkeypress="handleEnter(event, createNewGame)">
+            <button onclick="createNewGame()">+ Create</button>
+        </div>
+        <div id="gamesList"></div>
+    </div>
+
+    <!-- SECTION 2: Active Game Board -->
+    <div id="game-board" class="card">
+        <div class="flex header-flex" style="justify-content: space-between; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 15px;">
+            <button class="secondary" onclick="showGameManager()">← Back</button>
+            <h2 id="activeGameTitle" style="margin: 0; color: var(--primary);">Game Title</h2>
+            <div style="width: 70px;"></div>
+        </div>
+
+        <div class="flex">
+            <input type="text" id="newPlayerName" placeholder="Enter player name..." onkeypress="handleEnter(event, addPlayer)">
+            <button onclick="addPlayer()">👤 Add Player</button>
+            <button class="secondary" onclick="addRound()" style="background-color: #10b981; color: white;">➕ Add Round</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table id="scoreTable">
+                <!-- Table generated by JavaScript -->
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let games = JSON.parse(localStorage.getItem('scoreTrackerData')) || [];
+        let currentGameIndex = -1;
+
+        renderGamesList();
+
+        function saveData() {
+            localStorage.setItem('scoreTrackerData', JSON.stringify(games));
+        }
+
+        function handleEnter(e, callback) {
+            if(e.key === 'Enter') callback();
+        }
+
+        // --- GAME MANAGER ---
+        function createNewGame() {
+            const nameInput = document.getElementById('newGameName');
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            games.unshift({ id: Date.now(), name: name, rounds: 1, players: [] });
+            nameInput.value = '';
+            saveData();
+            renderGamesList();
+        }
+
+        function deleteGame(index) {
+            if(confirm("Delete this game entirely?")) {
+                games.splice(index, 1);
+                saveData();
+                renderGamesList();
+            }
+        }
+
+        function renderGamesList() {
+            const listDiv = document.getElementById('gamesList');
+            if (games.length === 0) {
+                listDiv.innerHTML = '<p style="text-align:center; color:var(--text-light); padding: 20px;">No games yet. Create one above to get started!</p>';
+                return;
+            }
+
+            listDiv.innerHTML = games.map((game, index) => `
+                <div class="game-item" style="animation-delay: ${index * 0.05}s">
+                    <strong style="font-size: 1.1em;">${game.name}</strong>
+                    <div>
+                        <button onclick="openGame(${index})">Open</button>
+                        <button class="danger" onclick="deleteGame(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- ACTIVE GAME ---
+        function openGame(index) {
+            currentGameIndex = index;
+            document.getElementById('game-manager').style.display = 'none';
+            document.getElementById('game-board').style.display = 'block';
+            document.getElementById('activeGameTitle').innerText = games[index].name;
+            renderTable();
+        }
+
+        function showGameManager() {
+            currentGameIndex = -1;
+            document.getElementById('game-board').style.display = 'none';
+            document.getElementById('game-manager').style.display = 'block';
+            renderGamesList();
+        }
+
+        function addPlayer() {
+            const nameInput = document.getElementById('newPlayerName');
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            games[currentGameIndex].players.push({
+                name: name,
+                scores: Array(games[currentGameIndex].rounds).fill(0)
+            });
+            nameInput.value = '';
+            saveData();
+            renderTable();
+        }
+
+        // Delete Player
+        function deletePlayer(pIndex) {
+            if(confirm("Remove this player from the game?")) {
+                games[currentGameIndex].players.splice(pIndex, 1);
+                saveData();
+                renderTable();
+            }
+        }
+
+        // Edit Player Name
+        function editPlayer(pIndex) {
+            const currentName = games[currentGameIndex].players[pIndex].name;
+            const newName = prompt("Edit player name:", currentName);
+            if (newName && newName.trim() !== "") {
+                games[currentGameIndex].players[pIndex].name = newName.trim();
+                saveData();
+                renderTable();
+            }
+        }
+
+        function addRound() {
+            games[currentGameIndex].rounds++;
+            games[currentGameIndex].players.forEach(player => player.scores.push(0));
+            saveData();
+            renderTable();
+            
+            setTimeout(() => {
+                const wrapper = document.querySelector('.table-wrapper');
+                wrapper.scrollTo({ left: wrapper.scrollWidth, behavior: 'smooth' });
+            }, 50);
+        }
+
+        // Delete a specific Round
+        function deleteRound(roundIndex) {
+            if(games[currentGameIndex].rounds <= 1) {
+                alert("You must have at least one round.");
+                return;
+            }
+            if(confirm(`Are you sure you want to delete Round ${roundIndex + 1}?`)) {
+                games[currentGameIndex].rounds--;
+                games[currentGameIndex].players.forEach(player => {
+                    player.scores.splice(roundIndex, 1); // Remove score for this round
+                });
+                saveData();
+                renderTable();
+            }
+        }
+
+        function updateScore(playerIndex, roundIndex, inputElement) {
+            let value = parseInt(inputElement.value);
+            if (isNaN(value)) value = 0; 
+            
+            games[currentGameIndex].players[playerIndex].scores[roundIndex] = value;
+            saveData();
+            
+            // Instantly update UI total without re-rendering the whole table so input focus isn't lost
+            const total = games[currentGameIndex].players[playerIndex].scores.reduce((a, b) => a + (parseInt(b) || 0), 0);
+            const totalEl = document.getElementById(`total-${playerIndex}`);
+            if(totalEl) {
+                totalEl.innerText = total;
+                // Re-apply bounce animation
+                totalEl.classList.remove('bounce-anim');
+                void totalEl.offsetWidth; // trigger reflow
+                totalEl.classList.add('bounce-anim');
+            }
+        }
+
+        function renderTable() {
+            const game = games[currentGameIndex];
+            const table = document.getElementById('scoreTable');
+            
+            // Generate Headers
+            let thead = '<thead><tr><th>Player</th>';
+            for (let r = 0; r < game.rounds; r++) {
+                // class 'round-header' triggers hover CSS. onclick toggles 'touched' for mobile taps.
+                thead += `
+                    <th class="round-header" onclick="this.classList.toggle('touched')">
+                        <div style="display:flex; align-items:center; justify-content:center; gap:5px;">
+                            R${r + 1}
+                            <button class="icon-btn delete-btn" onclick="deleteRound(${r}); event.stopPropagation();" title="Delete Round">❌</button>
+                        </div>
+                    </th>`;
+            }
+            thead += '<th>Total</th></tr></thead>';
+
+            // Generate Body
+            let tbody = '<tbody>';
+            if (game.players.length === 0) {
+                tbody += `<tr><td colspan="${game.rounds + 2}" style="color:var(--text-light); text-align: left; border: none; padding:20px;">No players added yet. Enter a name above!</td></tr>`;
+            } else {
+                game.players.forEach((player, pIndex) => {
+                    let total = player.scores.reduce((a, b) => a + (parseInt(b) || 0), 0);
+                    
+                    let row = `<tr class="player-row" style="animation-delay: ${pIndex * 0.05}s">
+                                <td>
+                                    <div class="player-info" onclick="this.classList.toggle('touched')">
+                                        <div class="player-name-wrap" onclick="editPlayer(${pIndex}); event.stopPropagation();" title="Click to edit name">
+                                            <div class="avatar">${player.name.charAt(0).toUpperCase()}</div>
+                                            <strong>${player.name}</strong> 
+                                            <span class="edit-hint" style="font-size:12px;">✏️</span>
+                                        </div>
+                                        <button class="icon-btn delete-btn" onclick="deletePlayer(${pIndex}); event.stopPropagation();" title="Delete Player">🗑️</button>
+                                    </div>
+                                </td>`;
+                    
+                    for (let r = 0; r < game.rounds; r++) {
+                        let score = player.scores[r] || 0;
+                        row += `<td>
+                            <input type="number" 
+                                   value="${score === 0 ? '' : score}" 
+                                   placeholder="0"
+                                   onfocus="this.select()"
+                                   oninput="updateScore(${pIndex}, ${r}, this)">
+                        </td>`;
+                    }
+                    
+                    row += `<td class="total-col"><span id="total-${pIndex}">${total}</span></td></tr>`;
+                    tbody += row;
+                });
+            }
+            tbody += '</tbody>';
+
+            table.innerHTML = thead + tbody;
+        }
+    </script>
+</body>
+</html>
