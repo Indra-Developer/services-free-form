@@ -550,38 +550,45 @@
     </div>
 
     <!-- SMART FORM MODAL -->
-    <div id="formModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto pt-20 pb-24 md:py-12">
-        <div id="modalContent" class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative max-h-full flex flex-col modal-enter ring-1 ring-slate-100">
+    <!-- SMART FORM MODAL (Optimized for Mobile & Desktop) -->
+    <div id="formModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto pt-safe pb-safe">
+        
+        <!-- Modal Container -->
+        <div id="modalContent" class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl relative flex flex-col modal-enter ring-1 ring-slate-100 max-h-[95vh] sm:max-h-[90vh]">
             
-            <button onclick="closeForm()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-full p-2.5 transition-all z-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <!-- Close Button -->
+            <button onclick="closeForm()" class="absolute top-4 right-4 sm:top-5 sm:right-5 text-slate-400 hover:text-slate-800 bg-white sm:bg-slate-100 hover:bg-slate-200 rounded-full p-2.5 transition-all z-20 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm sm:shadow-none">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
 
-            <div class="p-8 border-b border-slate-100 shrink-0 bg-slate-50/50 rounded-t-2xl">
-                <h3 class="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">Let’s Start With Your Idea</h3>
-                <p class="text-slate-500 text-base">Not sure what you need? No problem. Tell us your idea and we’ll guide you.</p>
+            <!-- Modal Header -->
+            <div class="p-5 sm:p-8 border-b border-slate-100 shrink-0 bg-slate-50/80 rounded-t-2xl pt-10 sm:pt-8">
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-1.5 sm:mb-2 tracking-tight">Let’s Start With Your Idea</h3>
+                <p class="text-sm sm:text-base text-slate-500">Not sure what you need? No problem. Tell us your idea and we’ll guide you.</p>
             </div>
 
-            <div class="p-8 overflow-y-auto hide-scrollbar">
+            <!-- Form Content Body -->
+            <div class="p-5 sm:p-8 overflow-y-auto hide-scrollbar flex-1 relative">
                 
-                <!-- SUCCESS STATE: Now includes the button to Explore Services -->
-                <div id="formSuccess" class="hidden text-center py-12">
-                    <div class="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm border border-emerald-100">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                <!-- SUCCESS STATE -->
+                <div id="formSuccess" class="hidden text-center py-8 sm:py-12">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-5 sm:mb-6 shadow-sm border border-emerald-100">
+                        <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <h3 class="text-3xl font-bold text-slate-900 mb-3">Request Received!</h3>
-                    <p class="text-slate-600 text-lg mb-8 max-w-sm mx-auto">Thank you for sharing your idea. Our team will review it and contact you shortly.</p>
+                    <h3 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 sm:mb-3">Request Received!</h3>
+                    <p class="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 max-w-sm mx-auto">Thank you for sharing your idea. Our team will review it and contact you shortly.</p>
                     
-                    <button onclick="closeFormAndScrollToServices()" class="w-full sm:w-auto bg-zigzex-blue text-white px-8 py-4 rounded-xl font-bold hover:bg-zigzex-blue-dark transition-all shadow-md inline-flex justify-center items-center gap-2">
+                    <button onclick="closeFormAndScrollToServices()" class="w-full sm:w-auto bg-zigzex-blue text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl font-bold hover:bg-zigzex-blue-dark transition-all shadow-md inline-flex justify-center items-center gap-2">
                         Explore Our Services &rarr;
                     </button>
                 </div>
 
-                <form id="ideaForm" class="space-y-8">
+                <form id="ideaForm" class="space-y-6 sm:space-y-8">
                     
-                    <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <!-- Quick Call Banner -->
+                    <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div class="flex items-center gap-3">
-                            <div class="bg-blue-100 p-2 rounded-full text-blue-600">
+                            <div class="bg-blue-100 p-2 rounded-full text-blue-600 shrink-0">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                             </div>
                             <div>
@@ -589,61 +596,68 @@
                                 <p class="text-xs text-slate-500">Call us directly to discuss your project.</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-3 font-bold text-blue-600 ml-12 sm:ml-0">
-                            <a href="tel:+918919695571" class="hover:text-blue-800 hover:underline transition-colors">8919695571</a>
+                        <div class="flex items-center gap-3 font-bold text-blue-600 ml-11 sm:ml-0 text-sm sm:text-base">
+                            <a href="tel:+918919695571" class="hover:text-blue-800 transition-colors">8919695571</a>
                             <span class="text-blue-200">|</span>
-                            <a href="tel:+916304963771" class="hover:text-blue-800 hover:underline transition-colors">6304963771</a>
+                            <a href="tel:+916304963771" class="hover:text-blue-800 transition-colors">6304963771</a>
                         </div>
                     </div>
                     
+                    <!-- Step 1: Category -->
                     <div>
-                        <label class="block text-sm font-bold text-slate-900 mb-4 uppercase tracking-wide">What can we help you with?</label>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="categoryGrid"></div>
+                        <label class="block text-xs sm:text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">What can we help you with?</label>
+                        <!-- Grid dynamically shifts from 1 column on tiny phones to 2 on standard phones, 3 on tablets/desktop -->
+                        <div class="grid grid-cols-1 min-[400px]:grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-3" id="categoryGrid"></div>
                     </div>
 
-                    <div id="serviceSelectionBox" class="hidden bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <label class="block text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">What would you like?</label>
+                    <!-- Step 2: Service Sub-selection -->
+                    <div id="serviceSelectionBox" class="hidden bg-slate-50 p-4 sm:p-6 rounded-xl border border-slate-200">
+                        <label class="block text-xs sm:text-sm font-bold text-slate-900 mb-3 uppercase tracking-wide">What would you like?</label>
                         <div class="flex flex-wrap gap-2" id="serviceGrid"></div>
                     </div>
 
-                    <hr class="border-slate-100">
+                    <hr class="border-slate-100 hidden sm:block">
 
+                    <!-- Description -->
                     <div>
                         <label class="block text-sm font-bold text-slate-900 mb-2">Briefly tell us about your idea</label>
-                        <textarea id="f_description" rows="4" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all resize-none shadow-sm" placeholder="Example: I need a website for my restaurant with a menu, contact details, and WhatsApp integration."></textarea>
+                        <textarea id="f_description" rows="3" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-base sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all resize-none shadow-sm" placeholder="Example: I need a website for my restaurant with a menu and contact details."></textarea>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Inputs -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <div>
-                            <label class="block text-sm font-bold text-slate-900 mb-2">Full Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="f_name" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="John Doe">
+                            <label class="block text-sm font-bold text-slate-900 mb-1.5">Full Name <span class="text-red-500">*</span></label>
+                            <!-- Note: text-base on mobile prevents iOS safari auto-zoom -->
+                            <input type="text" id="f_name" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-base sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all shadow-sm" placeholder="John Doe">
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-slate-900 mb-2">Phone Number <span class="text-red-500">*</span></label>
-                            <input type="tel" id="f_phone" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="+91 00000 00000">
+                            <label class="block text-sm font-bold text-slate-900 mb-1.5">Phone Number <span class="text-red-500">*</span></label>
+                            <input type="tel" id="f_phone" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-base sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all shadow-sm" placeholder="+91 00000 00000">
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-bold text-slate-900 mb-2">Email Address <span class="text-red-500">*</span></label>
-                            <input type="email" id="f_email" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="john@example.com">
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-bold text-slate-900 mb-1.5">Email Address <span class="text-red-500">*</span></label>
+                            <input type="email" id="f_email" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-base sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all shadow-sm" placeholder="john@example.com">
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-bold text-slate-900 mb-2">Existing Website / App Link <span class="text-slate-400 font-medium">(Optional)</span></label>
-                            <input type="url" id="f_url" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-600 transition-all shadow-sm" placeholder="https://yourwebsite.com">
+                        <div class="sm:col-span-2">
+                            <label class="block text-sm font-bold text-slate-900 mb-1.5">Existing Link <span class="text-slate-400 font-medium">(Optional)</span></label>
+                            <input type="url" id="f_url" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-base sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition-all shadow-sm" placeholder="https://yourwebsite.com">
                         </div>
                     </div>
 
-                    <!-- Enhanced Error State to alert about Firestore rules -->
-                    <div id="formError" class="hidden text-red-700 text-sm font-medium bg-red-50 p-4 rounded-lg border border-red-200 flex items-start gap-3">
-                        <svg class="w-5 h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                    <!-- Error Alert -->
+                    <div id="formError" class="hidden text-red-700 text-xs sm:text-sm font-medium bg-red-50 p-3 sm:p-4 rounded-lg border border-red-200 flex items-start gap-2 sm:gap-3">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
                         <div id="formErrorText">An error occurred while submitting your request. Please try again.</div>
                     </div>
 
-                    <div class="pt-4">
-                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 hover:shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 relative">
+                    <!-- Submit CTA -->
+                    <div class="pt-2 sm:pt-4">
+                        <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-3.5 sm:py-4 rounded-xl font-bold text-base sm:text-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center justify-center gap-2 relative">
                             <span id="btnText">Submit Free Request &rarr;</span>
-                            <span id="btnLoader" class="hidden spinner absolute right-6"></span>
+                            <span id="btnLoader" class="hidden spinner absolute right-4 sm:right-6"></span>
                         </button>
-                        <p class="text-center text-slate-400 text-xs mt-4">We respect your privacy. No spam, ever.</p>
+                        <p class="text-center text-slate-400 text-[11px] sm:text-xs mt-3 sm:mt-4 uppercase tracking-wide font-medium">We respect your privacy. No spam, ever.</p>
                     </div>
                 </form>
             </div>
